@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import "./style.css";
 
-import { Card } from "../../components/Card";
+import { Card, CardProps } from "../../components/Card";
+
+type APIResponse = {
+  name: string;
+  avatar_url: string;
+};
+
+type User = {
+  name: string;
+  avatar: string;
+};
 
 export function Home() {
   const [studentName, setStudentName] = useState("");
-  const [students, setStudents] = useState([]);
-  const [user, setUser] = useState({ name: "", avatar: "" });
+  const [students, setStudents] = useState<CardProps[]>([]);
+  const [user, setUser] = useState<User>({} as User);
 
   function handleAddStudent() {
     const newStudent = {
@@ -26,7 +35,7 @@ export function Home() {
     async function fetchData() {
       const url = "https://api.github.com/users/andreiafsouza";
       const userData = await fetch(url);
-      const data = await userData.json();
+      const data = (await userData.json()) as APIResponse;
 
       setUser({
         name: data.name,
